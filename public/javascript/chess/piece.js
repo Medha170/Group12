@@ -3,7 +3,8 @@ var Piece = function(config){
     this.color = config.color;
     if(this.position){
         this.render();        
-    }    
+    }
+    this.board = config.board;    
 }
 Piece.prototype.moveTo = function(targetPosition){
     console.log("Method not implemeted by: " + this.type);

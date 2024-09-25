@@ -29,7 +29,10 @@ Pawn.prototype.isValidPosition = function(targetPosition){
     } else if (Math.abs(targetPosition.col.charCodeAt(0) - currentCol.charCodeAt(0)) === 1 &&
                targetPosition.row === (currentRow + moveDistance).toString()) {
         // Diagonal capture (assuming there's an enemy piece, which should be checked in the main game logic)
-        return true;
+        if (this.board.getPieceAt(targetPosition.col + targetPosition.row) !== null) {
+            return true;
+        }
+        return false;
     }
 
     // If none of the above conditions are met, the move is invalid
@@ -38,11 +41,15 @@ Pawn.prototype.isValidPosition = function(targetPosition){
 }
 
 Pawn.prototype.moveTo = function(targetPosition){    
-    if(this.isValidPosition(targetPosition)){
-        this.position = targetPosition.col + targetPosition.row;
-        this.render();
-    }else{
-        //NOOP
+    if (this.board.turn === 'white' && this.color === 'white' || this.board.turn === 'black' && this.color === 'black') {
+        if(this.isValidPosition(targetPosition)){
+            this.position = targetPosition.col + targetPosition.row;
+            this.render();
+        }else{
+            //NOOP
+        }
     }
+
+    this.board.turn = this.board.turn === 'white' ? 'black' : 'white';
     
 }
