@@ -3,8 +3,7 @@ var Bishop = function(config){
     this.constructor(config);
 };
 
-Bishop.prototype = Object.create(Piece.prototype);
-Bishop.prototype.constructor = Bishop;
+Bishop.prototype = new Piece({});
 
 Bishop.prototype.moveTo = function(targetPosition) {    
     // Check if the turn matches the bishop's color
@@ -72,23 +71,23 @@ Bishop.prototype.isValidPosition = function(targetPosition) {
     return false;
 };
 
-// Method for capturing another piece
-Bishop.prototype.capture = function(targetPosition) {
-    // Validate the target position
-    if (this.isValidPosition(targetPosition)) {
-        // Get the piece at the target position
-        let targetPiece = this.board.getPieceAt(targetPosition);
+// // Method for capturing another piece
+// Bishop.prototype.capture = function(targetPosition) {
+//     // Validate the target position
+//     if (this.isValidPosition(targetPosition)) {
+//         // Get the piece at the target position
+//         let targetPiece = this.board.getPieceAt(targetPosition);
 
-        // Check if there is a piece to capture
-        if (targetPiece && targetPiece.color !== this.color) {
-            // Capture the piece by removing it from the board
-            this.board.removePiece(targetPosition);
-            // Move to the new position
-            this.moveTo(targetPosition);
-        } else {
-            throw new Error("Invalid capture: No opponent's piece to capture");
-        }
-    } else {
-        throw new Error("Invalid move for capture");
-    }
-};
+//         // Check if there is a piece to capture
+//         if (targetPiece && targetPiece.color !== this.color) {
+//             // Capture the piece by removing it from the board
+//             this.board.removePiece(targetPosition);
+//             // Move to the new position
+//             this.moveTo(targetPosition);
+//         } else {
+//             throw new Error("Invalid capture: No opponent's piece to capture");
+//         }
+//     } else {
+//         throw new Error("Invalid move for capture");
+//     }
+// };
