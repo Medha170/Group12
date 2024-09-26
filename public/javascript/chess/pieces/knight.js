@@ -28,10 +28,13 @@ Knight.prototype.isPathClear = function(newPosition) {
 };
 
 Knight.prototype.moveTo = function(newPosition) {
-    if (this.isValidMove(newPosition)) {
-        this.position = newPosition.col + newPosition.row;
-        this.render();
-    } else {
-        console.warn("Invalid move for knight");
+    if (this.board.turn === 'white' && this.color === 'white' || this.board.turn === 'black' && this.color === 'black') {
+        if (this.isValidMove(newPosition)) {
+            this.position = newPosition.col + newPosition.row;
+            this.render();
+        } else {
+            console.warn("Invalid move for knight");
+        }
     }
+    this.board.turn = this.board.turn === 'white' ? 'black' : 'white';
 };
