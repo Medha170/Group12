@@ -29,7 +29,7 @@ Pawn.prototype.isValidPosition = function(targetPosition){
     } else if (Math.abs(targetPosition.col.charCodeAt(0) - currentCol.charCodeAt(0)) === 1 &&
                targetPosition.row === (currentRow + moveDistance).toString()) {
         // Diagonal capture (assuming there's an enemy piece, which should be checked in the main game logic)
-        if (this.board.getPieceAt(targetPosition.col + targetPosition.row) !== null) {
+        if (this.board.getPieceAt(targetPosition.col + targetPosition.row)) {
             return true;
         }
         return false;
