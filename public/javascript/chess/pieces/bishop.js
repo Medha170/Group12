@@ -5,13 +5,24 @@ var Bishop = function(config){
 
 Bishop.prototype = new Piece({});
 
-Bishop.prototype.moveTo = function(newPosition){
-    if(this.isValidPosition(newPosition) && this.color === this.board.currentPlayer){
-        this.position = newPosition.col + newPosition.row;
-        this.render();
-        this.board.switchPlayer();
-    }else{
-        throw new Error("Invalid Bishop move");
+
+Bishop.prototype.moveTo = function(targetPosition) {    
+    // Check if the turn matches the bishop's color
+    if ((this.board.turn === 'white' && this.color === 'white') || 
+        (this.board.turn === 'black' && this.color === 'black')) {
+        
+        // Validate the new position
+        if (this.isValidPosition(targetPosition)) {
+            this.position = targetPosition.col + targetPosition.row; // Update the position
+            this.render(); // Render the new position
+        } else {
+            throw new Error("Invalid Bishop move");
+        }
+        
+        // Change turn
+        this.board.turn = this.board.turn === 'white' ? 'black' : 'white';
+    } else {
+        throw new Error("It's not your turn!");
     }
 }
 
