@@ -52,9 +52,8 @@
 
 // King Moves
 
-var King = function(config, board) {
+var King = function(config) {
     this.type = 'king';
-    this.board = board; // Store a reference to the board
     this.hasMoved = false; // Track if the king has moved (for castling)
     this.constructor(config);
 };
@@ -120,39 +119,53 @@ King.prototype.canCastle = function(targetPosition) {
 };
 
 King.prototype.moveTo = function(targetPosition) {
-    const result = this.isValidMove(targetPosition);
-    if (result === true || result === 'capture') {
-        // Move the king to the new position
-        this.position = targetPosition.col + targetPosition.row;
-        this.hasMoved = true;
-        this.render();
-        return true;
-    } else if (result === 'castle') {
-        // Perform castling
-        let direction = targetPosition.col > this.position[0] ? 1 : -1;
-        let rookCol = direction === 1 ? 'H' : 'A';
-        let rookRow = this.color === 'white' ? '1' : '8';
-        let rook = this.board.getPieceAt({col: rookCol, row: rookRow});
+    // Check if it's the king's turn
+    if ((this.board.turn === 'white' && this.color === 'white') || 
+        (this.board.turn === 'black' && this.color === 'black')) {
 
-        // Move the king
-        this.position = targetPosition.col + targetPosition.row;
-        this.hasMoved = true;
-        this.render();
+        const result = this.isValidMove(targetPosition);
 
-        // Move the rook
-        let newRookCol = direction === 1 ? 'F' : 'D';
-        rook.position = newRookCol + rookRow;
-        rook.hasMoved = true;
-        rook.render();
+        if (result === true || result === 'capture') {
+            // Move the king to the new position
+            this.position = targetPosition.col + targetPosition.row;
+            this.hasMoved = true;
+            this.render();
 
-        return true;
+            // Alternate turn after a valid move
+            this.board.turn = this.board.turn === 'white' ? 'black' : 'white';
+            return true;
+        } else if (result === 'castle') {
+            // Perform castling
+            let direction = targetPosition.col > this.position[0] ? 1 : -1;
+            let rookCol = direction === 1 ? 'H' : 'A';
+            let rookRow = this.color === 'white' ? '1' : '8';
+            let rook = this.board.getPieceAt({ col: rookCol, row: rookRow });
+
+            // Move the king
+            this.position = targetPosition.col + targetPosition.row;
+            this.hasMoved = true;
+            this.render();
+
+            // Move the rook
+            let newRookCol = direction === 1 ? 'F' : 'D';
+            rook.position = newRookCol + rookRow;
+            rook.hasMoved = true;
+            rook.render();
+
+            // Alternate turn after castling
+            this.board.turn = this.board.turn === 'white' ? 'black' : 'white';
+            return true;
+        }
     }
-    return false; // Invalid move
+    
+    // Invalid move, no turn switch
+    return false;
 };
 
-King.prototype.kill = function() {
-    if (this.$el && this.$el.parentNode) {
-        this.$el.parentNode.removeChild(this.$el);
-    }
-    this.position = null;
-};
+
+// King.prototype.kill = function() {
+//     if (this.$el && this.$el.parentNode) {
+//         this.$el.parentNode.removeChild(this.$el);
+//     }
+//     this.position = null;
+// };
